@@ -1,7 +1,13 @@
-const BASE_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:8081'}/api`;
+const DEFAULT_API_BASE = import.meta.env.PROD
+  ? 'https://tarefas-backend-lgau.onrender.com'
+  : 'http://localhost:8081';
+
+const RAW_API_BASE = (import.meta.env.VITE_API_URL || DEFAULT_API_BASE).trim();
+const BASE_URL = `${RAW_API_BASE.replace(/\/+$/, '').replace(/\/api$/, '')}/api`;
 
 async function request(path, options = {}) {
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  const res = await fetch(`${BASE_URL}${normalizedPath}`, {
     headers: { 'Content-Type': 'application/json' },
     ...options,
   });

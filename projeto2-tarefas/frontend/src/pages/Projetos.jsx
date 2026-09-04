@@ -17,11 +17,16 @@ export default function Projetos() {
 
   function criar(e) {
     e.preventDefault()
-    post('/projetos', { nome, descricao }).then(() => {
-      setNome('')
-      setDescricao('')
-      carregar()
-    })
+    post('/projetos', { nome, descricao })
+      .then(() => {
+        setNome('')
+        setDescricao('')
+        carregar()
+      })
+      .catch((error) => {
+        console.error('Erro ao criar projeto:', error)
+        alert(error.message || 'Não foi possível criar o projeto.')
+      })
   }
 
   return (
