@@ -66,38 +66,56 @@ export default function FormTarefa() {
   }
 
   return (
-    <div>
-      <h1>{id ? 'Editar Tarefa' : 'Nova Tarefa'}</h1>
-      <form className="card" onSubmit={handleSubmit}>
-        <div className="field">
-          <label>Titulo</label>
-          <input name="titulo" value={form.titulo} onChange={handleChange} />
+    <div className="page">
+      <header className="page-header">
+        <div>
+          <p className="eyebrow">Tarefas</p>
+          <h1>{id ? 'Editar tarefa' : 'Nova tarefa'}</h1>
         </div>
-        <div className="field">
-          <label>Descricao</label>
-          <textarea name="descricao" value={form.descricao} onChange={handleChange} />
+      </header>
+
+      <form className="card form-panel" onSubmit={handleSubmit}>
+        <div className="form-grid">
+          <div className="field full">
+            <label>Título</label>
+            <input name="titulo" value={form.titulo} onChange={handleChange} placeholder="Digite o título da tarefa" />
+          </div>
+
+          <div className="field full">
+            <label>Descrição</label>
+            <textarea name="descricao" value={form.descricao} onChange={handleChange} rows="5" placeholder="Descreva os detalhes da tarefa" />
+          </div>
+
+          <div className="field">
+            <label>Status</label>
+            <select name="status" value={form.status} onChange={handleChange}>
+              <option value="PENDENTE">Pendente</option>
+              <option value="EM_ANDAMENTO">Em andamento</option>
+              <option value="CONCLUIDA">Concluída</option>
+            </select>
+          </div>
+
+          <div className="field">
+            <label>Prioridade</label>
+            <select name="prioridade" value={form.prioridade} onChange={handleChange}>
+              <option value="BAIXA">Baixa</option>
+              <option value="MEDIA">Média</option>
+              <option value="ALTA">Alta</option>
+            </select>
+          </div>
+
+          <div className="field full">
+            <label>Data limite</label>
+            <input type="date" name="dataLimite" value={form.dataLimite || ''} onChange={handleChange} />
+          </div>
         </div>
-        <div className="field">
-          <label>Status</label>
-          <select name="status" value={form.status} onChange={handleChange}>
-            <option value="PENDENTE">Pendente</option>
-            <option value="EM_ANDAMENTO">Em andamento</option>
-            <option value="CONCLUIDA">Concluida</option>
-          </select>
+
+        <div className="form-actions">
+          <button type="button" className="secondary-button" onClick={() => navigate(-1)}>
+            Cancelar
+          </button>
+          <button type="submit" className="primary-button">Salvar</button>
         </div>
-        <div className="field">
-          <label>Prioridade</label>
-          <select name="prioridade" value={form.prioridade} onChange={handleChange}>
-            <option value="BAIXA">Baixa</option>
-            <option value="MEDIA">Media</option>
-            <option value="ALTA">Alta</option>
-          </select>
-        </div>
-        <div className="field">
-          <label>Data limite</label>
-          <input type="date" name="dataLimite" value={form.dataLimite || ''} onChange={handleChange} />
-        </div>
-        <button type="submit">Salvar</button>
       </form>
     </div>
   )
