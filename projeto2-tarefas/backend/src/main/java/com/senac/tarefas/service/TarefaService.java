@@ -45,10 +45,9 @@ public class TarefaService {
         tarefa.setStatus(dados.getStatus());
         tarefa.setPrioridade(dados.getPrioridade());
         tarefa.setDataLimite(dados.getDataLimite());
-        // BUG: usa o id que veio dentro do corpo da requisicao para salvar,
-        // em vez do id que veio na URL. Se o front mandar um id errado no
-        // corpo, a tarefa que sera alterada nao e a que o usuario esperava.
-        tarefa.setId(dados.getId() != null ? dados.getId() : idDaUrl);
+        if (dados.getProjetoId() != null) {
+            tarefa.setProjetoId(dados.getProjetoId());
+        }
         return tarefaRepository.save(tarefa);
     }
 

@@ -15,10 +15,30 @@ export default function FormTarefa() {
   })
 
   useEffect(() => {
-    if (id) {
-      get(`/tarefas/${id}`).then(setForm)
+    if (!id) {
+      setForm((prev) => ({
+        ...prev,
+        projetoId: projetoId || prev.projetoId || '',
+      }))
+      return
     }
-  }, [id])
+
+    get(`/tarefas/${id}`)
+      .then((tarefa) => {
+        setForm({
+          projetoId: tarefa.projetoId ?? projetoId ?? '',
+          titulo: tarefa.titulo ?? '',
+          descricao: tarefa.descricao ?? '',
+          status: tarefa.status ?? 'PENDENTE',
+          prioridade: tarefa.prioridade ?? 'MEDIA',
+          dataLimite: tarefa.dataLimite ?? '',
+        })
+      })
+      .catch((error) => {
+        console.error('Erro ao carregar tarefa para edição:', error)
+        alert(error.message || 'Não foi possível carregar a tarefa para edição.')
+      })
+  }, [id, projetoId])
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -26,12 +46,23 @@ export default function FormTarefa() {
 
   function handleSubmit(e) {
     e.preventDefault()
-    // BUG: nao valida se dataLimite esta no passado antes de salvar
-    if (id) {
-      put(`/tarefas/${id}`, form).then(() => navigate(-1))
-    } else {
-      post('/tarefas', form).then(() => navigate(-1))
+
+    const payload = {
+      ...form,
+      projetoId: Number(form.projetoId || projetoId || 0),
+      ...(id ? { id: Number(id) } : {}),
     }
+
+    const operacao = id
+      ? put(`/tarefas/${id}`, payload)
+      : post('/tarefas', payload)
+
+    operacao
+      .then(() => navigate(-1))
+      .catch((error) => {
+        console.error('Erro ao salvar tarefa:', error)
+        alert(error.message || 'Não foi possível salvar a tarefa.')
+      })
   }
 
   return (

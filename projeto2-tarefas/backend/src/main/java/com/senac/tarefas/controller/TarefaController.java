@@ -25,6 +25,11 @@ public class TarefaController {
         return tarefaService.listarTodas();
     }
 
+    @GetMapping("/{id}")
+    public Tarefa buscarPorId(@PathVariable Long id) {
+        return tarefaService.buscarPorId(id);
+    }
+
     @GetMapping("/atrasadas")
     public List<Tarefa> listarAtrasadas() {
         return tarefaService.listarAtrasadas();
